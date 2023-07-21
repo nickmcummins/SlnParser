@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SlnParser.Contracts;
+using SlnParser.Models;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -48,131 +48,131 @@ namespace SlnParser.Tests
             // -- Solution Configuration Platforms
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .Should()
                 .HaveCount(6);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(0)
                 .Name
                 .Should()
                 .Be("Debug|Any CPU");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(0)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Debug);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(0)
                 .Platform
                 .Should()
                 .Be(BuildPlatform.AnyCpu);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(1)
                 .Name
                 .Should()
                 .Be("Debug|x64");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(1)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Debug);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(1)
                 .Platform
                 .Should()
                 .Be(BuildPlatform.X64);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(2)
                 .Name
                 .Should()
                 .Be("Debug|x86");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(2)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Debug);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(2)
                 .Platform
                 .Should()
                 .Be(BuildPlatform.X86);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(3)
                 .Name
                 .Should()
                 .Be("Release|Any CPU");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(3)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Release);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(3)
                 .Platform
                 .Should()
                 .Be(BuildPlatform.AnyCpu);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(4)
                 .Name
                 .Should()
                 .Be("Release|x64");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(4)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Release);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(4)
                 .Platform
                 .Should()
                 .Be(BuildPlatform.X64);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(5)
                 .Name
                 .Should()
                 .Be("Release|x86");
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(5)
                 .Configuration
                 .Should()
                 .Be(BuildConfiguration.Release);
 
             solution
-                .ConfigurationPlatforms
+                .SolutionConfigurationPlatforms
                 .ElementAt(5)
                 .Platform
                 .Should()
@@ -180,24 +180,24 @@ namespace SlnParser.Tests
 
             // -- Projects
             solution
-                .AllProjects
+                .Projects
                 .Should()
                 .HaveCount(3);
 
             // 1. Project - ClassLib
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(0)
                 .Should()
                 .BeOfType<SolutionProject>();
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(0)
                 .Name
                 .Should()
                 .Be("SlnParser");
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(0)
                 .As<SolutionProject>()
                 .File
@@ -205,14 +205,14 @@ namespace SlnParser.Tests
                 .Should()
                 .Contain(@"SlnParser\SlnParser.csproj");
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(0)
                 .Type
                 .Should()
                 .Be(ProjectType.CSharp);
 
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(0)
                 .As<SolutionProject>()
                 .ConfigurationPlatforms
@@ -221,25 +221,25 @@ namespace SlnParser.Tests
 
             // 2. Project - Solution Folder
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(1)
                 .Should()
                 .BeOfType<SolutionFolder>();
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(1)
                 .Name
                 .Should()
                 .Be("Solution Items");
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(1)
                 .As<SolutionFolder>()
                 .Projects
                 .Should()
                 .BeEmpty();
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(1)
                 .Type
                 .Should()
@@ -247,18 +247,18 @@ namespace SlnParser.Tests
 
             // 3. Project - Test Project
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(2)
                 .Should()
                 .BeOfType<SolutionProject>();
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(2)
                 .Name
                 .Should()
                 .Be("SlnParser.Tests");
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(2)
                 .As<SolutionProject>()
                 .File
@@ -266,14 +266,14 @@ namespace SlnParser.Tests
                 .Should()
                 .Contain(@"SlnParser.Tests\SlnParser.Tests.csproj");
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(2)
                 .Type
                 .Should()
                 .Be(ProjectType.CSharp);
 
             solution
-                .AllProjects
+                .Projects
                 .ElementAt(2)
                 .As<SolutionProject>()
                 .ConfigurationPlatforms
@@ -291,17 +291,17 @@ namespace SlnParser.Tests
             var solution = sut.Parse(solutionFile);
 
             solution
-                .AllProjects
+                .Projects
                 .Should()
                 .HaveCount(8);
 
             solution
-                .Projects
+                .StructuredProjects
                 .Should()
                 .HaveCount(4);
 
             var firstSolutionFolder = solution
-                .AllProjects
+                .Projects
                 .OfType<SolutionFolder>()
                 .FirstOrDefault(folder => folder.Name == "SolutionFolder1");
 
@@ -315,7 +315,7 @@ namespace SlnParser.Tests
                                  file.Name == "test456.txt");
 
             var nestedSolutionFolder = solution
-                .AllProjects
+                .Projects
                 .OfType<SolutionFolder>()
                 .FirstOrDefault(folder => folder.Name == "NestedSolutionFolder");
 

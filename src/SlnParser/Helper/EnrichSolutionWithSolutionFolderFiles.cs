@@ -1,6 +1,6 @@
-﻿using SlnParser.Contracts;
-using SlnParser.Contracts.Exceptions;
+﻿using SlnParser.Contracts.Exceptions;
 using SlnParser.Contracts.Helper;
+using SlnParser.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,14 +10,14 @@ namespace SlnParser.Helper
 {
     internal sealed class EnrichSolutionWithSolutionFolderFiles : IEnrichSolution
     {
-        private readonly IParseProjectDefinition _parseProjectDefinition;
+        private readonly SolutionFileParser _parseProjectDefinition;
         private bool _inASolutionItemsSection;
 
         private SolutionFolder _solutionFolderForCurrentSection;
 
         public EnrichSolutionWithSolutionFolderFiles()
         {
-            _parseProjectDefinition = new ProjectDefinitionParser();
+            _parseProjectDefinition = new SolutionFileParser();
         }
 
         /*
@@ -65,7 +65,7 @@ namespace SlnParser.Helper
                 return;
 
             var actualSolutionFolder = solution
-                .AllProjects
+                .Projects
                 .OfType<SolutionFolder>()
                 .FirstOrDefault(folder => folder.Id == slnFolder.Id);
             if (actualSolutionFolder == null) return;

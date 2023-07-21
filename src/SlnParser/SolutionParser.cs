@@ -2,6 +2,7 @@
 using SlnParser.Contracts.Exceptions;
 using SlnParser.Contracts.Helper;
 using SlnParser.Helper;
+using SlnParser.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,25 +13,22 @@ namespace SlnParser
     /// <inheritdoc />
     public sealed class SolutionParser : ISolutionParser
     {
-        private readonly IEnumerable<IEnrichSolution> _solutionEnrichers;
+        private static readonly IEnumerable<IEnrichSolution> _solutionEnrichers = new IEnrichSolution[]
+        {
+            new EnrichSolutionWithProjects(),
+            new EnrichSolutionWithSolutionConfigurationPlatforms(),
+            /*
+                * NOTE: It's important that this happens _after_ the 'EnrichSolutionWithProjects',
+                * because we need the parsed projects before we can map the configurations to them
+                */
+            new EnrichSolutionWithProjectConfigurationPlatforms(),
+            new EnrichSolutionWithSolutionFolderFiles()
+        };
 
         /// <summary>
         ///     Creates a new instance of <see cref="SolutionParser" />
         /// </summary>
-        public SolutionParser()
-        {
-            _solutionEnrichers = new List<IEnrichSolution>
-            {
-                new EnrichSolutionWithProjects(),
-                new EnrichSolutionWithSolutionConfigurationPlatforms(),
-                /*
-                 * NOTE: It's important that this happens _after_ the 'EnrichSolutionWithProjects',
-                 * because we need the parsed projects before we can map the configurations to them
-                 */
-                new EnrichSolutionWithProjectConfigurationPlatforms(),
-                new EnrichSolutionWithSolutionFolderFiles()
-            };
-        }
+        public SolutionParser() { }
 
         /// <inheritdoc />
         public ISolution Parse(string solutionFileName)
@@ -95,20 +93,13 @@ namespace SlnParser
 
         private ISolution ParseInternal(FileInfo solutionFile)
         {
-            var solution = new Solution
-            {
-                Name = Path.GetFileNameWithoutExtension(solutionFile.FullName), File = solutionFile
-            };
-            var allLines = File.ReadAllLines(solutionFile.FullName);
-            var allLinesTrimmed = allLines
-                .Select(line => line.Trim())
-                .Where(line => line.Length > 0)
-                .ToList();
+            var solution = new Solution(solutionFile);
+
 
             foreach (var enricher in _solutionEnrichers)
-                enricher.Enrich(solution, allLinesTrimmed);
+                enricher.Enrich(solution, solution._allLinesTrimmed);
 
-            foreach (var line in allLines)
+            foreach (var line in solution._allLines)
                 ProcessLine(line, solution);
 
             return solution;

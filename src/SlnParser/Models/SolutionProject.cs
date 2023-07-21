@@ -1,18 +1,27 @@
-﻿using System;
+﻿using SlnParser.Common.Utilities;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 
-namespace SlnParser.Contracts
+namespace SlnParser.Models
 {
     /// <summary>
     ///     A Solution Project that can be contained in a <see cref="Solution" />
     /// </summary>
-    public class SolutionProject : IProject
+    public class SolutionProject : SlnProject, ISlnProject
     {
-        private readonly ICollection<ConfigurationPlatform> _configurationPlatforms =
-            new Collection<ConfigurationPlatform>();
+        private readonly ICollection<ConfigurationPlatform> _configurationPlatforms;
+
+        /// <summary>
+        ///     The File of the Project
+        /// </summary>
+        public FileInfo File { get; }
+
+        /// <summary>
+        ///     The <see cref="ConfigurationPlatform" />s configured for this solution
+        /// </summary>
+        public IEnumerable<ConfigurationPlatform> ConfigurationPlatforms { get; }
+
 
         /// <summary>
         ///     Creates a new instance of <see cref="SolutionProject" />
@@ -27,37 +36,12 @@ namespace SlnParser.Contracts
             string name,
             Guid typeGuid,
             ProjectType type,
-            FileInfo fileInfo)
+            FileInfo fileInfo,
+            Solution sln = null) : base(id, name, typeGuid, type, sln)
         {
-            Id = id;
-            Name = name;
-            TypeGuid = typeGuid;
-            Type = type;
             File = fileInfo;
+            _configurationPlatforms = new List<ConfigurationPlatform>();
         }
-
-        /// <summary>
-        ///     The File of the Project
-        /// </summary>
-        public FileInfo File { get; }
-
-        /// <summary>
-        ///     The <see cref="ConfigurationPlatform" />s configured for this solution
-        /// </summary>
-        public IReadOnlyCollection<ConfigurationPlatform> ConfigurationPlatforms =>
-            _configurationPlatforms.ToList().AsReadOnly();
-
-        /// <inheritdoc />
-        public Guid Id { get; }
-
-        /// <inheritdoc />
-        public string Name { get; }
-
-        /// <inheritdoc />
-        public Guid TypeGuid { get; }
-
-        /// <inheritdoc />
-        public ProjectType Type { get; }
 
         internal void AddConfigurationPlatform(ConfigurationPlatform configurationPlatform)
         {
@@ -65,5 +49,10 @@ namespace SlnParser.Contracts
 
             _configurationPlatforms.Add(configurationPlatform);
         }
+
+        public override string ToString() => $"""
+Project("{_projectType.guid.ToUpper().WithBraces()}") = "{Name}", "{File.FullName.Replace($@"{Sln.File.DirectoryName}\", string.Empty)}", "{Id.ToUpper().WithBraces()}"
+EndProject
+""";
     }
 }

@@ -1,6 +1,6 @@
-﻿using SlnParser.Contracts;
-using SlnParser.Contracts.Exceptions;
+﻿using SlnParser.Contracts.Exceptions;
 using SlnParser.Contracts.Helper;
+using SlnParser.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,11 +8,11 @@ namespace SlnParser.Helper
 {
     internal sealed class EnrichSolutionWithProjectConfigurationPlatforms : IEnrichSolution
     {
-        private readonly IParseSolutionConfigurationPlatform _parseSolutionConfigurationPlatform;
+        private readonly SolutionFileParser _parseSolutionConfigurationPlatform;
 
         public EnrichSolutionWithProjectConfigurationPlatforms()
         {
-            _parseSolutionConfigurationPlatform = new SolutionConfigurationPlatformParser();
+            _parseSolutionConfigurationPlatform = new SolutionFileParser();
         }
 
         public void Enrich(Solution solution, IEnumerable<string> fileContents)
@@ -20,6 +20,7 @@ namespace SlnParser.Helper
             var projectConfigurations = _parseSolutionConfigurationPlatform.Parse(
                 fileContents,
                 "GlobalSection(ProjectConfiguration");
+            solution.ProjectConfigurationPlatforms = projectConfigurations;
             MapConfigurationPlatformsToProjects(solution, projectConfigurations);
         }
 
@@ -41,7 +42,7 @@ namespace SlnParser.Helper
                     $"for the Project-Platform-Configuration '{configuration.ConfigurationPlatform.Name}'");
 
             var project = solution
-                .AllProjects
+                .Projects
                 .FirstOrDefault(project => project.Id == configuration.ProjectId.Value);
 
             if (project == null) return;

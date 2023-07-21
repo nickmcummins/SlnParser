@@ -1,4 +1,7 @@
-﻿namespace SlnParser.Contracts
+﻿using SlnParser.Common.Utilities;
+using static SlnParser.Common.Utilities.StringExtensions;
+
+namespace SlnParser.Models
 {
     /// <summary>
     ///     A Configuration of a Solution or Project describing which <see cref="BuildConfiguration" /> and
@@ -36,5 +39,7 @@
         ///     The <see cref="BuildPlatform" /> the <see cref="ConfigurationPlatform" /> is targeting
         /// </summary>
         public BuildPlatform Platform { get; }
+
+        public override string ToString() => $"{Name} = {Configuration}|{Platform.GetDescription()}";
     }
 }

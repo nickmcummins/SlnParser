@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace SlnParser.Contracts
+namespace SlnParser.Models
 {
     /// <summary>
     ///     An interface representing all the information contained in a Visual Studio Solution File (sln)
@@ -29,18 +29,18 @@ namespace SlnParser.Contracts
         VisualStudioVersion VisualStudioVersion { get; set; }
 
         /// <summary>
-        ///     A flat list of all <see cref="IProject" />s contained in the solution
+        ///     A flat list of all <see cref="ISlnProject" />s contained in the solution
         /// </summary>
-        IReadOnlyCollection<IProject> AllProjects { get; }
+        IEnumerable<ISlnProject> Projects { get; }
 
         /// <summary>
-        ///     A structured list of all <see cref="IProject" />s contained in the solution
+        ///     A structured list of all <see cref="ISlnProject" />s contained in the solution
         /// </summary>
-        IReadOnlyCollection<IProject> Projects { get; }
+        IEnumerable<ISlnProject> StructuredProjects { get; }
 
         /// <summary>
         ///     The <see cref="ConfigurationPlatform" />s configured for this solution
         /// </summary>
-        IReadOnlyCollection<ConfigurationPlatform> ConfigurationPlatforms { get; }
+        IReadOnlyCollection<ConfigurationPlatform> SolutionConfigurationPlatforms { get; }
     }
 }

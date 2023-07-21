@@ -1,4 +1,4 @@
-﻿namespace SlnParser.Contracts
+﻿namespace SlnParser.Models
 {
     /// <summary>
     ///     The Build-Configuration of a Project or Solution

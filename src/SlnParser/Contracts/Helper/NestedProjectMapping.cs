@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SlnParser.Common.Utilities;
+using System;
 
 namespace SlnParser.Contracts.Helper
 {
-    internal class NestedProjectMapping
+    public class NestedProjectMapping
     {
         public NestedProjectMapping(
             string targetId,
@@ -15,5 +16,7 @@ namespace SlnParser.Contracts.Helper
         public Guid TargetId { get; }
 
         public Guid DestinationId { get; }
+
+        public override string ToString() => $"        {TargetId.ToString().ToUpper().WithBraces()} = {DestinationId.ToString().ToUpper().WithBraces()}";
     }
 }

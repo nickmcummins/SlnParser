@@ -1,5 +1,5 @@
-﻿using SlnParser.Contracts;
-using SlnParser.Contracts.Helper;
+﻿using SlnParser.Contracts.Helper;
+using SlnParser.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +7,11 @@ namespace SlnParser.Helper
 {
     internal sealed class EnrichSolutionWithSolutionConfigurationPlatforms : IEnrichSolution
     {
-        private readonly IParseSolutionConfigurationPlatform _parseSolutionConfigurationPlatform;
+        private readonly SolutionFileParser _parseSolutionConfigurationPlatform;
 
         public EnrichSolutionWithSolutionConfigurationPlatforms()
         {
-            _parseSolutionConfigurationPlatform = new SolutionConfigurationPlatformParser();
+            _parseSolutionConfigurationPlatform = new SolutionFileParser();
         }
 
         public void Enrich(Solution solution, IEnumerable<string> fileContents)
@@ -19,7 +19,7 @@ namespace SlnParser.Helper
             var projectConfigurations = _parseSolutionConfigurationPlatform.Parse(
                 fileContents,
                 "GlobalSection(SolutionConfiguration");
-            solution.ConfigurationPlatforms = projectConfigurations
+            solution.SolutionConfigurationPlatforms = projectConfigurations
                 .Select(projectConfiguration => projectConfiguration.ConfigurationPlatform)
                 .ToList()
                 .AsReadOnly();

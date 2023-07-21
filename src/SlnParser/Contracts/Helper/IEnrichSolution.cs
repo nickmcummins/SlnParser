@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SlnParser.Models;
+using System.Collections.Generic;
 
 namespace SlnParser.Contracts.Helper
 {

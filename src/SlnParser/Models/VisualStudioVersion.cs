@@ -1,4 +1,4 @@
-﻿namespace SlnParser.Contracts
+﻿namespace SlnParser.Models
 {
     /// <summary>
     ///     A Visual Studio Version
@@ -14,5 +14,7 @@
         ///     The minimum Version of Visual Studio that is compatible
         /// </summary>
         public string MinimumVersion { get; set; }
+
+        public override string ToString() => $"VisualStudioVersion = {Version}\nMinimumVisualStudioVersion = {MinimumVersion}";
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SlnParser.Common.Utilities;
+using SlnParser.Models;
+using System;
 
 namespace SlnParser.Contracts.Helper
 {
-    internal sealed class ProjectConfigurationPlatform
+    public sealed class ProjectConfigurationPlatform
     {
         public ProjectConfigurationPlatform(
             Guid? projectId,
@@ -15,5 +17,8 @@ namespace SlnParser.Contracts.Helper
         public Guid? ProjectId { get; }
 
         public ConfigurationPlatform ConfigurationPlatform { get; }
+
+        public override string ToString() => $"         {ProjectId.ToString().ToUpper().WithBraces()}.{ConfigurationPlatform}";
+
     }
 }

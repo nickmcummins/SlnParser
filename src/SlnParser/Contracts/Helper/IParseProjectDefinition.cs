@@ -1,10 +1,12 @@
-﻿namespace SlnParser.Contracts.Helper
+﻿using SlnParser.Models;
+
+namespace SlnParser.Contracts.Helper
 {
     internal interface IParseProjectDefinition
     {
         bool TryParseProjectDefinition(
             Solution solution,
             string projectDefinition,
-            out IProject project);
+            out ISlnProject project);
     }
 }

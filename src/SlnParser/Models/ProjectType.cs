@@ -1,4 +1,4 @@
-﻿namespace SlnParser.Contracts
+﻿namespace SlnParser.Models
 {
     /// <summary>
     ///     The well-known <see cref="ProjectType" />s
